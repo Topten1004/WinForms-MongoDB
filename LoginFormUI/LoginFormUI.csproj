@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CreateNewUserForm.resx~RF1478b13.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DeviceId" Version="6.3.0" />
     <PackageReference Include="DeviceId.Windows" Version="6.2.0" />
     <PackageReference Include="DeviceId.Windows.Wmi" Version="6.2.0" />
