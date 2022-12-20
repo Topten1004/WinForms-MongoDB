@@ -33,12 +33,13 @@
             this.newConfirmPasswordValue = new System.Windows.Forms.TextBox();
             this.newPasswordValue = new System.Windows.Forms.TextBox();
             this.newPasswordLabel = new System.Windows.Forms.Label();
-            this.newCountryValue = new System.Windows.Forms.TextBox();
             this.newCountryLabel = new System.Windows.Forms.Label();
             this.newEmailValue = new System.Windows.Forms.TextBox();
             this.newEmailLabel = new System.Windows.Forms.Label();
             this.createNewUserButton = new System.Windows.Forms.Button();
             this.showPasswordCheckBox = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.comBoCountry = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // headerLabel
@@ -86,13 +87,6 @@
             this.newPasswordLabel.TabIndex = 4;
             this.newPasswordLabel.Text = "Password";
             // 
-            // newCountryValue
-            // 
-            this.newCountryValue.Location = new System.Drawing.Point(199, 344);
-            this.newCountryValue.Name = "newCountryValue";
-            this.newCountryValue.Size = new System.Drawing.Size(167, 35);
-            this.newCountryValue.TabIndex = 7;
-            // 
             // newCountryLabel
             // 
             this.newCountryLabel.AutoSize = true;
@@ -120,7 +114,7 @@
             // 
             // createNewUserButton
             // 
-            this.createNewUserButton.Location = new System.Drawing.Point(126, 423);
+            this.createNewUserButton.Location = new System.Drawing.Point(149, 426);
             this.createNewUserButton.Name = "createNewUserButton";
             this.createNewUserButton.Size = new System.Drawing.Size(189, 50);
             this.createNewUserButton.TabIndex = 12;
@@ -140,17 +134,42 @@
             this.showPasswordCheckBox.UseVisualStyleBackColor = true;
             this.showPasswordCheckBox.CheckedChanged += new System.EventHandler(this.showPasswordCheckBox_CheckedChanged);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 52);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "back";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // comBoCountry
+            // 
+            this.comBoCountry.DropDownHeight = 100;
+            this.comBoCountry.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.comBoCountry.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.comBoCountry.FormattingEnabled = true;
+            this.comBoCountry.IntegralHeight = false;
+            this.comBoCountry.ItemHeight = 25;
+            this.comBoCountry.Location = new System.Drawing.Point(196, 353);
+            this.comBoCountry.MaxDropDownItems = 5;
+            this.comBoCountry.Name = "comBoCountry";
+            this.comBoCountry.Size = new System.Drawing.Size(170, 33);
+            this.comBoCountry.TabIndex = 15;
+            // 
             // CreateNewUserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(440, 539);
+            this.Controls.Add(this.comBoCountry);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.showPasswordCheckBox);
             this.Controls.Add(this.createNewUserButton);
             this.Controls.Add(this.newEmailValue);
             this.Controls.Add(this.newEmailLabel);
-            this.Controls.Add(this.newCountryValue);
             this.Controls.Add(this.newCountryLabel);
             this.Controls.Add(this.newPasswordValue);
             this.Controls.Add(this.newPasswordLabel);
@@ -175,11 +194,12 @@
         private System.Windows.Forms.Label newPasswordLabel;
         private System.Windows.Forms.Label newConfirmPasswordLabel;
         private System.Windows.Forms.TextBox newConfirmPasswordValue;
-        private System.Windows.Forms.TextBox newCountryValue;
         private System.Windows.Forms.Label newCountryLabel;
         private System.Windows.Forms.TextBox newEmailValue;
         private System.Windows.Forms.Label newEmailLabel;
         private System.Windows.Forms.Button createNewUserButton;
         private System.Windows.Forms.CheckBox showPasswordCheckBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comBoCountry;
     }
 }

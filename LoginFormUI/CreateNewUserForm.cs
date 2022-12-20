@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,24 @@ namespace LoginFormUI
         public CreateNewUserForm()
         {
             InitializeComponent();
+
+            List<string> cultureList = new List<string>();
+            CultureInfo[] getCultureInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+
+            foreach(CultureInfo getCulture in getCultureInfo)
+            {
+                RegionInfo getRegionInfo = new RegionInfo(getCulture.LCID);
+
+                if(!(cultureList.Contains(getRegionInfo.EnglishName)))
+                {
+                    cultureList.Add(getRegionInfo.EnglishName);
+                }
+            }
+
+            this.comBoCountry.Items.Clear();
+            foreach(var culture in cultureList) {
+                comBoCountry.Items.Add(culture);
+            }
         }
 
         private void CreateNewUserForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -41,13 +60,13 @@ namespace LoginFormUI
  .ToString();
                     var newUser = new UserModel();
                     newUser.Password = newPasswordValue.Text;
-                    newUser.Country = newCountryValue.Text;
+                    newUser.Country = comBoCountry.Text;
                     newUser.Email = newEmailValue.Text;
                     newUser.Status = "Disable";
                     newUser.Access = new List<int>();
-                    newUser.Found = new List<string>();
+                    newUser.Found = "";
                     newUser.ComputerId = deviceId;
-                    for(int i = 0; i <= 6; i++)
+                    for(int i = 1; i <= 6; i++)
                     {
                         newUser.Access.Add(i);
                     }    
@@ -78,13 +97,13 @@ namespace LoginFormUI
             bool output = true;
             string outputMessage = "";
 
-            if (newPasswordValue.Text.Length < 6 && newPasswordValue.Text != newConfirmPasswordValue.Text)
+            if (newPasswordValue.Text.Length < 6 || newPasswordValue.Text != newConfirmPasswordValue.Text)
             {
                 output = false;
                 outputMessage += "Password\n";
             }
 
-            if (newCountryValue.Text == "")
+            if (comBoCountry.Text == "")
             {
                 output = false;
                 outputMessage += "Country\n";
@@ -109,6 +128,12 @@ namespace LoginFormUI
         {
             newPasswordValue.PasswordChar = showPasswordCheckBox.Checked ? '\0' : '*';
             newPasswordValue.PasswordChar = showPasswordCheckBox.Checked ? '\0' : '*';
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Program.mainForm.Show();
         }
     }
 }

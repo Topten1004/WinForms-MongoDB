@@ -18,7 +18,7 @@ namespace LoginFormDataAccess.Models
         public string Country { get; set; }
         public string Status { get; set; }
         public string ComputerId { get; set; }
-        public List<string> Found { get; set; }
+        public string Found { get; set; }
         public List<int> Access { get; set; }
     }
 }

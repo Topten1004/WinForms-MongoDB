@@ -83,7 +83,7 @@
             // 
             // userMenuLogoutButton
             // 
-            this.userMenuLogoutButton.Location = new System.Drawing.Point(539, 1);
+            this.userMenuLogoutButton.Location = new System.Drawing.Point(715, 9);
             this.userMenuLogoutButton.Name = "userMenuLogoutButton";
             this.userMenuLogoutButton.Size = new System.Drawing.Size(130, 43);
             this.userMenuLogoutButton.TabIndex = 9;
@@ -114,20 +114,22 @@
             // 
             this.richTextBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.SplitButton;
             this.richTextBox2.BackColor = System.Drawing.SystemColors.MenuText;
+            this.richTextBox2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.Window;
             this.richTextBox2.Location = new System.Drawing.Point(50, 86);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ReadOnly = true;
             this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.richTextBox2.Size = new System.Drawing.Size(619, 168);
+            this.richTextBox2.Size = new System.Drawing.Size(795, 168);
             this.richTextBox2.TabIndex = 12;
             this.richTextBox2.Text = "";
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Enabled = false;
             this.richTextBox1.Location = new System.Drawing.Point(50, 296);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(619, 96);
+            this.richTextBox1.Size = new System.Drawing.Size(795, 96);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "";
             // 
@@ -147,14 +149,14 @@
             this.panel5.Controls.Add(this.checkBox1);
             this.panel5.Location = new System.Drawing.Point(50, 398);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(619, 231);
+            this.panel5.Size = new System.Drawing.Size(795, 231);
             this.panel5.TabIndex = 14;
             // 
             // pictureBox6
             // 
             this.pictureBox6.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(518, 140);
+            this.pictureBox6.Location = new System.Drawing.Point(686, 140);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(54, 53);
             this.pictureBox6.TabIndex = 11;
@@ -165,7 +167,7 @@
             // 
             this.pictureBox5.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(270, 140);
+            this.pictureBox5.Location = new System.Drawing.Point(353, 140);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(54, 53);
             this.pictureBox5.TabIndex = 10;
@@ -187,7 +189,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(518, 34);
+            this.pictureBox3.Location = new System.Drawing.Point(686, 34);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(54, 53);
             this.pictureBox3.TabIndex = 8;
@@ -198,7 +200,7 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(270, 34);
+            this.pictureBox2.Location = new System.Drawing.Point(353, 34);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(54, 53);
             this.pictureBox2.TabIndex = 7;
@@ -219,7 +221,7 @@
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(540, 199);
+            this.checkBox6.Location = new System.Drawing.Point(708, 199);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(15, 14);
             this.checkBox6.TabIndex = 5;
@@ -229,7 +231,7 @@
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(289, 199);
+            this.checkBox5.Location = new System.Drawing.Point(372, 199);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(15, 14);
             this.checkBox5.TabIndex = 4;
@@ -249,7 +251,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(540, 93);
+            this.checkBox3.Location = new System.Drawing.Point(708, 93);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(15, 14);
             this.checkBox3.TabIndex = 2;
@@ -259,7 +261,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(289, 93);
+            this.checkBox2.Location = new System.Drawing.Point(372, 93);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(15, 14);
             this.checkBox2.TabIndex = 1;
@@ -282,7 +284,7 @@
             this.button1.ForeColor = System.Drawing.Color.White;
             this.button1.Location = new System.Drawing.Point(50, 662);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(619, 47);
+            this.button1.Size = new System.Drawing.Size(795, 47);
             this.button1.TabIndex = 15;
             this.button1.Text = "START";
             this.button1.UseVisualStyleBackColor = false;
@@ -293,7 +295,7 @@
             this.button2.BackColor = System.Drawing.Color.Red;
             this.button2.Location = new System.Drawing.Point(50, 715);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(619, 44);
+            this.button2.Size = new System.Drawing.Size(795, 44);
             this.button2.TabIndex = 16;
             this.button2.Text = "STOP";
             this.button2.UseVisualStyleBackColor = false;
@@ -304,7 +306,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(732, 761);
+            this.ClientSize = new System.Drawing.Size(891, 761);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel5);

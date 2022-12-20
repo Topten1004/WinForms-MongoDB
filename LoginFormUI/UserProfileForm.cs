@@ -1,14 +1,17 @@
 ﻿using LoginFormDataAccess.DataAccess;
 using LoginFormDataAccess.Models;
+using LoginFormUI.Properties;
 using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +30,8 @@ namespace LoginFormUI
         private bool running = false;
         private bool pause = false;
         private Thread thread;
-        private Thread background;
+        private Thread netcheck;
+        private Thread dbcheck;
         private long count = Program.CHECK_START;
         private List<string> search = new List<string>();
 
@@ -39,14 +43,50 @@ namespace LoginFormUI
         public UserProfileForm()
         {
             InitializeComponent();
+            if(!isSingle())
+            {
+                MessageBox.Show("You cant run second app!");
+                Application.Exit();
+            }
+
             this.thread = new Thread(new ThreadStart(this.doCheck));
             thread.IsBackground = true;
             char[] separator = new char[] { ' ' };
             this.splitedWords = this.words.Split(separator);
             this.timer1.Enabled = true;
             this.timer1.Interval = Program.updateTimeout;
-            this.background = new Thread(new ThreadStart(this.backgroundService));
-            background.Start();
+            this.netcheck = new Thread(new ThreadStart(this.connectionService));
+            this.dbcheck = new Thread(new ThreadStart(this.dbService));
+            dbcheck.IsBackground = true;
+            netcheck.IsBackground = true;
+            netcheck.Start();
+        }
+
+        public static bool isSingle()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            Process[] processesByName = Process.GetProcessesByName(currentProcess.ProcessName);
+            int index = 0;
+            while (true)
+            {
+                bool flag3;
+                if (index >= processesByName.Length)
+                {
+                    flag3 = true;
+                }
+                else
+                {
+                    Process process2 = processesByName[index];
+                    bool flag = process2.Id != currentProcess.Id;
+                    if (!flag || (Assembly.GetExecutingAssembly().Location.Replace("/", @"\") != currentProcess.MainModule.FileName))
+                    {
+                        index++;
+                        continue;
+                    }
+                    flag3 = false;
+                }
+                return flag3;
+            }
         }
 
         public void SetUser(object sender, string userId)
@@ -55,7 +95,7 @@ namespace LoginFormUI
             userLoginForm = sender as UserLoginForm;
             userLoggedInLabel.Text = currentUser.Email;
             this.userId = userId;
-
+            dbcheck.Start();
             foreach (Control control in this.panel5.Controls)
             {
                 bool flag2 = control is CheckBox;
@@ -99,7 +139,7 @@ namespace LoginFormUI
                     if (control.Name == "checkBox6")
                         if (currentUser.Access.Contains(6))
                         {
-                            Control t = panel5.Controls.Find("pictureBox5", true)[0];
+                            Control t = panel5.Controls.Find("pictureBox6", true)[0];
                             t.Show();
                             control.Show();
                         }
@@ -129,9 +169,11 @@ namespace LoginFormUI
                     this.thread.Resume();
                 }
                 this.thread.Abort();
-                this.background.Abort();
+                this.netcheck.Abort();
+                this.dbcheck.Abort();
                 this.thread.Join();
-                this.background.Join();
+                this.netcheck.Join();
+                this.dbcheck.Join();
                 Application.Exit();
             }
             catch (Exception)
@@ -146,18 +188,27 @@ namespace LoginFormUI
             this.Close();
         }
 
-        // Background internet check and check user status ("Active" or "Disactive")
-        private void backgroundService()
+        private void dbService()
         {
-            int count = 0;
-            while (true)
+            while(true)
             {
-                ++count;
                 currentUser = db.GetUserFromId(userId);
+                if (currentUser != null)
+                {
+                    this.richTextBox1.Text = this.richTextBox1.Text + "\n" + currentUser.Found;
+                }
                 if (currentUser != null && currentUser.Status != "Active")
                 {
                     this.Close();
                 }
+                Thread.Sleep(300000);
+            }
+        }
+        // Background internet check and check user status ("Active" or "Disactive")
+        private void connectionService()
+        {
+            while (true)
+            {
                 if (CheckInternet() == ConnectionStatus.NotConnected)
                 {
                     this.Close();
@@ -230,7 +281,7 @@ namespace LoginFormUI
                         {
                             if ((j < 0L) || (j <= (this.count - Program.CHECK_SCORE)))
                             {
-                                this.count += Program.CHECK_SCORE;
+                                this.count += Program.CHECK_SCORE;                                
                                 Thread.Sleep(Program.SPEED_PER_ROW);
                                 resetEvent.WaitOne();
                                 break;
@@ -241,6 +292,29 @@ namespace LoginFormUI
                     }
                     res = res + " " + this.splitedWords[random.Next(0, this.splitedWords.Length - 1)];
                     num++;
+
+                    bool flag = false;
+
+                    foreach (Control control in this.panel5.Controls)
+                    {
+                        bool flag2 = control is CheckBox;
+                        if (flag2 && ((CheckBox)control).Checked)
+                        {
+                            flag = true;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        MessageBox.Show("Please check atleast 1 Checkbox");
+                        this.running = false;
+
+                        // set the event incase we are currently paused
+                        this.resetEvent.Set();
+
+                        // wait for the thread to finish
+                        this.thread.Join();
+
+                    }
                 }
             }
         }
@@ -319,29 +393,16 @@ namespace LoginFormUI
                 }
             }
 
-            for(int i = 0; i < searchs.Count; i++)
-            {
-                if(currentUser.Found.Count > 0)
-                {
-                    if (!name.Contains(currentUser.Found[searchs[i]]))
-                    {
-                        break;
-                    }
-                    else if (i == searchs.Count - 1)
-                    {
-                        this.richTextBox1.Invoke((MethodInvoker)delegate {
-                            this.richTextBox1.Text = name + "\n" + this.richTextBox1.Text;
-                            this.label2.Invoke((MethodInvoker)delegate {
-                                int num = this.found + 1;
-                                this.found = num;
-                                this.label2.Text = string.Format("Found: {0}", num);
-                            });
-                        });
+            //this.richTextBox1.Invoke((MethodInvoker)delegate {
+            //    this.richTextBox1.Text = name + "\n" + this.richTextBox1.Text;
+            //    this.label2.Invoke((MethodInvoker)delegate {
+            //        int num = this.found + 1;
+            //        this.found = num;
+            //        this.label2.Text = string.Format("Found: {0}", num);
+            //    });
+            //});
 
-                        this.saveToFile(name);
-                    }
-                }
-            }
+            this.saveToFile(name);
 
         }
 
