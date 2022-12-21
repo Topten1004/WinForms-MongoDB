@@ -76,9 +76,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(50, 53);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(97, 30);
+            this.label2.Size = new System.Drawing.Size(114, 30);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Checked:";
+            this.label2.Text = "Checked: 0";
             // 
             // label1
             // 
@@ -86,9 +86,9 @@
             this.label1.ForeColor = System.Drawing.Color.Green;
             this.label1.Location = new System.Drawing.Point(50, 263);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 30);
+            this.label1.Size = new System.Drawing.Size(93, 30);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Found:";
+            this.label1.Text = "Found: 0";
             // 
             // richTextBox2
             // 
@@ -106,9 +106,13 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Enabled = false;
+            this.richTextBox1.BackColor = System.Drawing.Color.Black;
+            this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox1.ForeColor = System.Drawing.Color.Green;
             this.richTextBox1.Location = new System.Drawing.Point(50, 296);
             this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedHorizontal;
             this.richTextBox1.Size = new System.Drawing.Size(795, 96);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "";

@@ -41,6 +41,7 @@ namespace LoginFormUI
         /// <param name="e"></param>
         private void loginButton_Click(object sender, EventArgs e)
         {
+            // Get Device code
             string deviceId = new DeviceIdBuilder()
 .AddMachineName()
 .AddMacAddress()
@@ -52,8 +53,10 @@ namespace LoginFormUI
                 {
                     var user = db.GetUserFromUsername(usernameValue.Text).user;
 
+                    // Password Check
                     if (db.ValidatePassword(user, passwordValue.Text))
                     {
+                        // Device Id check
                         if(db.ValidateComputerId(user, deviceId))
                         {
                             if (user.Status != "Disable")

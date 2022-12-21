@@ -147,7 +147,7 @@
             // comBoCountry
             // 
             this.comBoCountry.DropDownHeight = 100;
-            this.comBoCountry.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.comBoCountry.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comBoCountry.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.comBoCountry.FormattingEnabled = true;
             this.comBoCountry.IntegralHeight = false;

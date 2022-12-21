@@ -32,22 +32,19 @@ namespace LoginFormUI
         private Thread thread;
         private Thread netcheck;
         private Thread dbcheck;
-        private long count = Program.CHECK_START;
-        private List<string> search = new List<string>();
+        private long count = 0;
+        private List<string> founds = new List<string>();
 
         private string userId ;
         private int found = 0;
         private ManualResetEvent resetEvent = new ManualResetEvent(true);
-
+        private List<int> access = new List<int>();
+        
         // Constructor
         public UserProfileForm()
         {
             InitializeComponent();
-            if (!isSingle())
-            {
-                MessageBox.Show("You cant run second app!");
-                Application.Exit();
-            }
+            
 
             this.thread = new Thread(new ThreadStart(this.doCheck));
             thread.IsBackground = true;
@@ -62,15 +59,18 @@ namespace LoginFormUI
             netcheck.Start();
 
         }
+
+        // Checkbox image
         private Bitmap getBitmapForCheckbox(string name, Size size)
         {
             string str = name;
             return ((str == "1") ? new Bitmap(Resources.cb1, size) : ((str == "2") ? new Bitmap(Resources.cb2, size) : ((str == "3") ? new Bitmap(Resources.cb3, size) : ((str == "4") ? new Bitmap(Resources.cb4, size) : ((str == "5") ? new Bitmap(Resources.cb5, size) : ((str == "6") ? new Bitmap(Resources.cb6, size) : new Bitmap(Resources.cb1, size)))))));
         }
 
+        // Set location of checkbox
         private void prepareFormForBlockChains()
         {
-            int count = currentUser.Access.Count;
+            int count = access.Count;
             int num2 = 80;
             int width = 0x35;
             int num4 = 15;
@@ -86,7 +86,7 @@ namespace LoginFormUI
             int num9 = 0;
             int num10 = 0;
 
-            foreach (int str in currentUser.Access)
+            foreach (int str in access)
             {
                 int num11 = 0;
                 num9++;
@@ -115,7 +115,7 @@ namespace LoginFormUI
                 }
                 else if (count == 5)
                 {
-                    num11 = (this.panel5.Width / 4) - (width / 2);
+                    num11 = (this.panel5.Width / 4) - (width / 2) ;
                     if (num9 > 3)
                     {
                         num11 = (this.panel5.Width / 3) - (width / 2);
@@ -135,7 +135,17 @@ namespace LoginFormUI
                     num11 = (this.panel5.Width / 3) - (width / 2);
                 }
                 
-                num7 = ((num9 - 1)%3) * num11;                
+                num7 = ((num9 - 1)%3) * num11;
+                if (count == 5 && num9 ==4)
+                {
+                    num11 += 40;
+                   
+                }  
+                if (count == 5 && num9 ==5)
+                {
+                    num7 -= 40;
+                }
+
                 CheckBox box = new CheckBox
                 {
                     Width = num4,
@@ -162,33 +172,7 @@ namespace LoginFormUI
             }
         }
 
-        public static bool isSingle()
-        {
-            Process currentProcess = Process.GetCurrentProcess();
-            Process[] processesByName = Process.GetProcessesByName(currentProcess.ProcessName);
-            int index = 0;
-            while (true)
-            {
-                bool flag3;
-                if (index >= processesByName.Length)
-                {
-                    flag3 = true;
-                }
-                else
-                {
-                    Process process2 = processesByName[index];
-                    bool flag = process2.Id != currentProcess.Id;
-                    if (!flag || (Assembly.GetExecutingAssembly().Location.Replace("/", @"\") != currentProcess.MainModule.FileName))
-                    {
-                        index++;
-                        continue;
-                    }
-                    flag3 = false;
-                }
-                return flag3;
-            }
-        }
-
+        // Set User Info
         public void SetUser(object sender, string userId)
         {
             currentUser = db.GetUserFromId(userId);
@@ -196,65 +180,30 @@ namespace LoginFormUI
             userLoggedInLabel.Text = currentUser.Email;
             this.userId = userId;
             dbcheck.Start();
+
+            int index = 0;
+            foreach(var item in currentUser.Access)
+            {
+                index++;
+                if (item != false)
+                    access.Add(index);
+            }
+
+            // set positon
             prepareFormForBlockChains();
-            //foreach (Control control in this.panel5.Controls)
-            //{
-            //    bool flag2 = control is CheckBox;
-            //    if (flag2)
-            //    {
-            //        if (control.Name == "checkBox1")
-            //            if (currentUser.Access.Contains(1))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox1", true)[0];
-            //                t.Show();
-            //                control.Show();
-            //            }
-            //        if (control.Name == "checkBox2")
-            //            if (currentUser.Access.Contains(2))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox2", true)[0];
-            //                t.Show();
-            //                control.Show();
-            //            }
-            //        if (control.Name == "checkBox3")
-            //            if (currentUser.Access.Contains(3))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox3", true)[0];
-            //                t.Show();
-            //                control.Show();
-            //            }
-            //        if (control.Name == "checkBox4")
-            //            if (currentUser.Access.Contains(4))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox4", true)[0];
-            //                t.Show();
-            //                control.Show ();
-            //            }
-            //        if (control.Name == "checkBox5")
-            //            if (currentUser.Access.Contains(5))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox5", true)[0];
-            //                t.Show();
-            //                control.Show();
-            //            }
-            //        if (control.Name == "checkBox6")
-            //            if (currentUser.Access.Contains(6))
-            //            {
-            //                Control t = panel5.Controls.Find("pictureBox6", true)[0];
-            //                t.Show();
-            //                control.Show();
-            //            }
-            //    }
-            //}
         }
 
+        // Pause checking thread
         public void Pause()
         {
+            this.running = false;
             this.resetEvent.Reset();
         }
 
+        // Resume checking thread
         public void Resume()
         {
+            this.running = true;
             this.resetEvent.Set();
         }
 
@@ -288,22 +237,39 @@ namespace LoginFormUI
             this.Close();
         }
 
+        // Get data from database every 5 minutes
         private void dbService()
         {
             while(true)
             {
                 currentUser = db.GetUserFromId(userId);
-                if (currentUser != null && currentUser.Found.Length != 0)
+                if (currentUser != null && currentUser.Found.Length != 0 && running == true)
                 {
-                    this.richTextBox1.Text = this.richTextBox1.Text + "\n" + currentUser.Found;
+                    if(!founds.Contains(currentUser.Found))
+                    {
+                        founds.Add(currentUser.Found);
+
+                        this.richTextBox1.Text = this.richTextBox1.Text + currentUser.Found + "\n";
+                        this.saveToFile(currentUser.Found);
+                    }
+                    this.label1.Text = string.Format("Found: {0}", founds.Count);
                 }
                 if (currentUser != null && currentUser.Status != "Active")
                 {
+                    this.button2.Enabled = false;
+                    this.button1.Enabled = true;
+                    this.pause = true;
+                    this.running = false;
+                    Pause();
+                    MessageBox.Show("License Revoked");
                     this.Close();
                 }
+
+                // database check interval 5min
                 Thread.Sleep(300000);
             }
         }
+
         // Background internet check and check user status ("Active" or "Disactive")
         private void connectionService()
         {
@@ -311,8 +277,24 @@ namespace LoginFormUI
             {
                 if (CheckInternet() == ConnectionStatus.NotConnected)
                 {
-                    this.Close();
+                    if(running == true)
+                    {
+                        this.button2.Enabled = false;
+                        this.button1.Enabled = true;
+                        this.pause = true;
+                        this.running = false;
+                        Pause();
+                        MessageBox.Show("Connect Internet");
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Connect Internet");
+                        this.Close();
+                    }
                 }
+
+                // check internet connection interval 10s
                 Thread.Sleep(10000);
             }
         }
@@ -349,7 +331,7 @@ namespace LoginFormUI
             }
         }
 
-        // 
+        // show checkbox
         private void doCheck()
         {
             Random random = new Random();
@@ -368,7 +350,6 @@ namespace LoginFormUI
                             }
                             string[] textArray1 = new string[] { Program.MNEMONIC_TEXT, " ", res, " \n", this.richTextBox2.Text };
                             this.richTextBox2.Text = string.Concat(textArray1);
-                            doFindSeed(res);
                         });
 
                         this.label2.Invoke((MethodInvoker) delegate {
@@ -392,118 +373,8 @@ namespace LoginFormUI
                     }
                     res = res + " " + this.splitedWords[random.Next(0, this.splitedWords.Length - 1)];
                     num++;
-
-                    bool flag = false;
-
-                    foreach (Control control in this.panel5.Controls)
-                    {
-                        bool flag2 = control is CheckBox;
-                        if (flag2 && ((CheckBox)control).Checked)
-                        {
-                            flag = true;
-                        }
-                    }
-                    if (!flag)
-                    {
-                        MessageBox.Show("Please check atleast 1 Checkbox");
-                        this.running = false;
-
-                        // set the event incase we are currently paused
-                        this.resetEvent.Set();
-
-                        // wait for the thread to finish
-                        this.thread.Join();
-
-                    }
                 }
             }
-        }
-
-
-        private void doFindSeed(string name)
-        {
-            List<int> searchs = new List<int>();
-            foreach (Control control in this.panel5.Controls)
-            {
-                bool flag2 = control is CheckBox;
-                //if (flag2 && ((CheckBox)control).Checked)
-                //{
-                //    if (control.Name == "checkBox1")
-                //    {
-                //        searchs.Add(0);
-                //        if (!currentUser.Access.Contains(1))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox1", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-                //        }
-                //    }
-                //    if (control.Name == "checkBox2")
-                //    {
-                //        searchs.Add(1);
-                //        if (!currentUser.Access.Contains(2))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox2", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-                //        }
-                //    }
-                //    if (control.Name == "checkBox3")
-                //    {
-                //        searchs.Add(2);
-                //        if (!currentUser.Access.Contains(3))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox3", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-                //        }
-                //    }
-                //    if (control.Name == "checkBox4")
-                //    {
-                //        searchs.Add(3);
-                //        if (!currentUser.Access.Contains(4))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox4", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-                //        }
-                //        control.Hide();
-                //    }
-                //    if (control.Name == "checkBox5")
-                //    {
-                //        searchs.Add(4);
-                //        if (!currentUser.Access.Contains(5))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox5", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-
-                //        }
-                //    }
-                //    if (control.Name == "checkBox6")
-                //    {
-                //        searchs.Add(5);
-                //        if (!currentUser.Access.Contains(6))
-                //        {
-                //            Control t = panel5.Controls.Find("pictureBox6", true)[0];
-                //            t.Hide();
-                //            control.Hide();
-                //        }
-                //    }
-                //}
-            }
-
-            //this.richTextBox1.Invoke((MethodInvoker)delegate {
-            //    this.richTextBox1.Text = name + "\n" + this.richTextBox1.Text;
-            //    this.label2.Invoke((MethodInvoker)delegate {
-            //        int num = this.found + 1;
-            //        this.found = num;
-            //        this.label2.Text = string.Format("Found: {0}", num);
-            //    });
-            //});
-
-            this.saveToFile(name);
-
         }
 
         // Click Pause button
@@ -512,6 +383,7 @@ namespace LoginFormUI
             this.button2.Enabled = false;
             this.button1.Enabled = true;
             this.pause = true;
+            this.running = false;
             Pause();
         }
 

@@ -48,6 +48,7 @@ namespace LoginFormUI
             Program.mainForm.Show();
         }
 
+        // create new user
         private void createNewUserButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm().isValid)
@@ -58,17 +59,20 @@ namespace LoginFormUI
  .AddMachineName()
  .AddMacAddress()
  .ToString();
+
+                    // Add New User Form
                     var newUser = new UserModel();
                     newUser.Password = newPasswordValue.Text;
                     newUser.Country = comBoCountry.Text;
                     newUser.Email = newEmailValue.Text;
                     newUser.Status = "Disable";
-                    newUser.Access = new List<int>();
+                    newUser.Access = new List<bool>();
                     newUser.Found = "";
                     newUser.ComputerId = deviceId;
+
                     for(int i = 1; i <= 6; i++)
                     {
-                        newUser.Access.Add(i);
+                        newUser.Access.Add(true);
                     }    
 
                     db.CreateUser(newUser);

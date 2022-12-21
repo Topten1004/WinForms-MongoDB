@@ -9,6 +9,7 @@ using Tweetinvi.Security;
 
 namespace LoginFormDataAccess.DataAccess
 {
+    // Mongodb database connection
     public class LoginDataAccess
     {
         
