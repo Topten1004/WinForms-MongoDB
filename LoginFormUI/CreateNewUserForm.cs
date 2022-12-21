@@ -83,7 +83,6 @@ namespace LoginFormUI
                 {
                     MessageBox.Show("That username is already taken");
                 }
-             
             }
             else
             {
